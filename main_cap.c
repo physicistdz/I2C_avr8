@@ -69,49 +69,5 @@ float getHeading(void){
 
 	i2c_start(CAP_READ);
 
-	raw_x = ((uint8_t)i2c_read_ack())<<8;
-	raw_x |= i2c_read_ack();
 
-	raw_z = ((uint8_t)i2c_read_ack())<<8;
-	raw_z |= i2c_read_ack();
-
-	raw_y = ((uint8_t)i2c_read_ack())<<8;
-	raw_y |= i2c_read_nack();
-
-	i2c_stop();
-
-	headingDegrees = atan2((double)raw_y,(double)raw_x) * 180 / 3.141592654 + 180;
-
-	return headingDegrees;
-}
-
-int main(void){
-
-	init_uart(57600);
-	i2c_init();
-	init_CAP();
-
-	while(1){
-		getHeading();
-
-		itoa(raw_x, buffer, 10);
-		uart_puts(buffer);
-		uart_puts("  ");
-
-		itoa(raw_y, buffer, 10);
-		uart_puts(buffer);
-		uart_puts("  ");
-
-		itoa(raw_z, buffer, 10);
-		uart_puts(buffer);
-		uart_puts("  ");
-
-		dtostrf(headingDegrees, 6, 2, buffer);
-		uart_puts(buffer);
-		uart_puts("  \r\n");
-
-		_delay_ms(1000);
-	}
-
-	return 0;
 }
